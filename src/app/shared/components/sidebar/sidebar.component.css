@@ -6,6 +6,10 @@
   overflow: hidden;
 }
 
+:host .brand h4 {
+  color: #fff;
+}
+
 :host > .sidebar {
   width: 240px;
   transition: width 0.25s ease;
