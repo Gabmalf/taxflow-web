@@ -78,11 +78,25 @@
       </div>
 
       <div class="col-12 mt-4">
-        <div class="p-4 border rounded bg-light text-center">
+        <div class="p-4 border rounded bg-light text-center"
+             [class.border-danger]="fileError"
+             [class.border-success]="selectedFileName">
           <i class="bi bi-cloud-arrow-up fs-2 text-muted mb-2 d-block"></i>
           <p class="mb-2">Sube tu comprobante (PDF, JPG, PNG)</p>
-          <input type="file" class="form-control d-inline-block w-auto" accept=".pdf,.jpg,.jpeg,.png">
-          <small class="d-block text-muted mt-2">Tamaño máximo: 5MB</small>
+          <input type="file"
+                 class="form-control d-inline-block w-auto"
+                 accept=".pdf,.jpg,.jpeg,.png"
+                 (change)="onFileSelected($event)">
+          @if (selectedFileName) {
+            <small class="d-block text-success mt-2">
+              <i class="bi bi-check-circle"></i> {{ selectedFileName }}
+            </small>
+          }
+          @if (fileError) {
+            <small class="d-block text-danger mt-2">
+              <i class="bi bi-exclamation-circle"></i> {{ fileError }}
+            </small>
+          }
         </div>
       </div>
     </div>
