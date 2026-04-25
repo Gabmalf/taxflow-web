@@ -1,0 +1,51 @@
+:host {
+  display: block;
+  width: 240px;
+  flex-shrink: 0;
+  transition: width 0.25s ease;
+  overflow: hidden;
+}
+
+:host > .sidebar {
+  width: 240px;
+  transition: width 0.25s ease;
+}
+
+:host.collapsed {
+  width: 72px;
+}
+
+:host.collapsed > .sidebar {
+  width: 72px;
+}
+
+:host.collapsed .sidebar-label {
+  opacity: 0;
+  visibility: hidden;
+  width: 0;
+  display: inline-block;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+
+:host.collapsed .nav-link {
+  text-align: center;
+  padding: 0.8rem 0.5rem;
+}
+
+:host.collapsed .nav-link i {
+  margin-right: 0;
+  font-size: 1.25rem;
+}
+
+:host.collapsed .brand {
+  justify-content: center;
+}
+
+:host.collapsed .brand i {
+  margin-right: 0 !important;
+}
+
+.sidebar-label {
+  transition: opacity 0.15s ease;
+}
