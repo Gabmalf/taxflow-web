@@ -1,0 +1,95 @@
+<div class="mb-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/expenses" class="text-decoration-none text-success">Mis Gastos</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Nuevo Gasto</li>
+    </ol>
+  </nav>
+  <h2 class="fw-bold">Registrar Gasto Deducible</h2>
+</div>
+
+<div class="tf-card" style="max-width: 800px;">
+  <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Categoría SUNAT</label>
+        <select class="form-select" formControlName="category"
+                [class.is-invalid]="expenseForm.get('category')?.invalid && expenseForm.get('category')?.touched">
+          <option value="">Seleccione una categoría</option>
+          @for (cat of categories; track cat) {
+            <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+        @if (expenseForm.get('category')?.invalid && expenseForm.get('category')?.touched) {
+          <div class="invalid-feedback">La categoría es requerida.</div>
+        }
+      </div>
+      
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Fecha</label>
+        <input type="date" class="form-control" formControlName="date"
+               [class.is-invalid]="expenseForm.get('date')?.invalid && expenseForm.get('date')?.touched">
+        @if (expenseForm.get('date')?.invalid && expenseForm.get('date')?.touched) {
+          <div class="invalid-feedback">La fecha es requerida.</div>
+        }
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Monto</label>
+        <div class="input-group">
+          <select class="form-select" formControlName="currency" style="max-width: 100px;">
+            <option value="Soles">S/</option>
+            <option value="Dolares">$</option>
+          </select>
+          <input type="number" class="form-control" formControlName="amount" placeholder="0.00" step="0.01"
+                 [class.is-invalid]="expenseForm.get('amount')?.invalid && expenseForm.get('amount')?.touched">
+          @if (expenseForm.get('amount')?.invalid && expenseForm.get('amount')?.touched) {
+            <div class="invalid-feedback">Ingrese un monto válido mayor a 0.</div>
+          }
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-medium">RUC del Proveedor</label>
+        <input type="text" class="form-control" formControlName="providerRuc" placeholder="11 dígitos" maxlength="11"
+               [class.is-invalid]="expenseForm.get('providerRuc')?.invalid && expenseForm.get('providerRuc')?.touched">
+        @if (expenseForm.get('providerRuc')?.invalid && expenseForm.get('providerRuc')?.touched) {
+          <div class="invalid-feedback">Debe tener 11 dígitos.</div>
+        }
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Tipo de Comprobante</label>
+        <select class="form-select" formControlName="receiptType">
+          <option value="Factura Electrónica">Factura Electrónica</option>
+          <option value="Boleta de Venta Electrónica">Boleta de Venta Electrónica</option>
+          <option value="Recibo por Honorarios">Recibo por Honorarios</option>
+          <option value="Formulario 1683">Formulario 1683 (Arrendamiento)</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Descripción</label>
+        <input type="text" class="form-control" formControlName="description" placeholder="Ej. Almuerzo de negocios"
+               [class.is-invalid]="expenseForm.get('description')?.invalid && expenseForm.get('description')?.touched">
+        @if (expenseForm.get('description')?.invalid && expenseForm.get('description')?.touched) {
+          <div class="invalid-feedback">La descripción es requerida.</div>
+        }
+      </div>
+
+      <div class="col-12 mt-4">
+        <div class="p-4 border rounded bg-light text-center">
+          <i class="bi bi-cloud-arrow-up fs-2 text-muted mb-2 d-block"></i>
+          <p class="mb-2">Sube tu comprobante (PDF, JPG, PNG)</p>
+          <input type="file" class="form-control d-inline-block w-auto" accept=".pdf,.jpg,.jpeg,.png">
+          <small class="d-block text-muted mt-2">Tamaño máximo: 5MB</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <a routerLink="/expenses" class="btn btn-outline-secondary fw-bold">Cancelar</a>
+      <button type="submit" class="btn btn-success fw-bold">Guardar Gasto</button>
+    </div>
+  </form>
+</div>

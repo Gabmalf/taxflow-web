@@ -1,0 +1,42 @@
+<div class="mb-4">
+  <h2 class="fw-bold">Accesibilidad</h2>
+  <p class="text-muted">Personaliza la apariencia de la plataforma para una mejor experiencia.</p>
+</div>
+
+<div class="tf-card max-w-800 mx-auto">
+  <div class="list-group list-group-flush">
+    <div class="list-group-item py-4 d-flex justify-content-between align-items-center">
+      <div>
+        <h5 class="fw-bold mb-1"><i class="bi bi-circle-half me-2"></i> Alto Contraste</h5>
+        <p class="text-muted mb-0 small">Mejora la legibilidad aumentando el contraste de colores.</p>
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input fs-4" type="checkbox" role="switch" [checked]="highContrast" (change)="toggleHighContrast()">
+      </div>
+    </div>
+
+    <div class="list-group-item py-4 d-flex justify-content-between align-items-center">
+      <div>
+        <h5 class="fw-bold mb-1"><i class="bi bi-type me-2"></i> Tamaño de Fuente Grande</h5>
+        <p class="text-muted mb-0 small">Aumenta el tamaño del texto en toda la aplicación.</p>
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input fs-4" type="checkbox" role="switch" [checked]="largeFont" (change)="toggleLargeFont()">
+      </div>
+    </div>
+
+    <div class="list-group-item py-4 d-flex justify-content-between align-items-center">
+      <div>
+        <h5 class="fw-bold mb-1"><i class="bi bi-book me-2"></i> Modo Lectura Simple</h5>
+        <p class="text-muted mb-0 small">Oculta elementos secundarios para enfocar la lectura.</p>
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input fs-4" type="checkbox" role="switch" [checked]="simpleReading" (change)="toggleSimpleReading()">
+      </div>
+    </div>
+  </div>
+  
+  <div class="alert alert-info border-0 mt-4 mb-0">
+    <i class="bi bi-info-circle me-2"></i> Estas preferencias se guardarán en tu navegador para futuras sesiones.
+  </div>
+</div>

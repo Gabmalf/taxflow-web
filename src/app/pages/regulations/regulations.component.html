@@ -1,0 +1,53 @@
+<div class="mb-4">
+  <h2 class="fw-bold">Normativa Tributaria</h2>
+  <p class="text-muted">Biblioteca normativa con los conceptos clave que debes conocer sobre tus impuestos en Perú.</p>
+</div>
+
+<div class="row g-4">
+<!-- Lista de Normas -->
+  <div class="col-lg-8">
+    <div class="row g-4">
+      @for (reg of regulations; track reg.id) {
+        <div class="col-md-6">
+          <div class="tf-card h-100 d-flex flex-column" [class.border-primary]="selectedRegulation?.id === reg.id">
+            <div class="mb-2">
+              <span class="badge bg-secondary bg-opacity-10 text-secondary">{{ reg.category }}</span>
+            </div>
+            <h5 class="fw-bold text-primary-dark mb-2">{{ reg.title }}</h5>
+            <p class="text-muted small mb-3 flex-grow-1">{{ reg.summary }}</p>
+            <div class="d-flex justify-content-between align-items-center mt-auto border-top pt-3">
+              <small class="text-muted"><i class="bi bi-clock me-1"></i> Actualizado: {{ reg.updatedAt }}</small>
+              <button class="btn btn-sm btn-outline-primary" (click)="selectRegulation(reg)">Ver detalle</button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Detalle -->
+  <div class="col-lg-4">
+    <div class="tf-card h-100 sticky-top" style="top: 2rem;">
+      @if (selectedRegulation) {
+        <h5 class="fw-bold mb-3 border-bottom pb-2">{{ selectedRegulation.title }}</h5>
+        <div class="mb-3">
+          <span class="badge bg-secondary bg-opacity-10 text-secondary me-2">{{ selectedRegulation.category }}</span>
+          <small class="text-muted">Actualizado: {{ selectedRegulation.updatedAt }}</small>
+        </div>
+        <div class="mb-4 lh-lg text-secondary-dark">
+          {{ selectedRegulation.content }}
+        </div>
+        
+        <div class="alert alert-warning border-0 small">
+          <i class="bi bi-exclamation-triangle-fill me-1"></i>
+          <strong>Nota:</strong> Esta información es referencial y un resumen simplificado de la normativa de la SUNAT.
+        </div>
+      } @else {
+        <div class="text-center py-5 text-muted">
+          <i class="bi bi-book fs-1 mb-3 d-block opacity-50"></i>
+          <p>Selecciona una normativa para ver su detalle completo aquí.</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

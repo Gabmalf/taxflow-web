@@ -1,0 +1,41 @@
+<div class="mb-4">
+  <h2 class="fw-bold">Guía de Declaración</h2>
+  <p class="text-muted">Sigue estos pasos para prepararte antes de realizar tu Declaración Anual ante SUNAT.</p>
+</div>
+
+<div class="tf-card max-w-800 mx-auto">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">Pasos sugeridos para preparar tu declaración</h5>
+    <span class="badge bg-primary rounded-pill">7 pasos sugeridos</span>
+  </div>
+
+  <div class="list-group list-group-flush">
+    @for (step of steps; track step.num) {
+      <div class="list-group-item px-0 py-3 d-flex align-items-start border-bottom">
+        
+        <div class="me-3 mt-1">
+          <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 28px; height: 28px; font-size: 0.85rem; font-weight: bold;">
+            {{ step.num }}
+          </div>
+        </div>
+        
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <h6 class="mb-0 fw-bold">
+              {{ step.title }}
+            </h6>
+          </div>
+          <p class="text-muted small mb-2">{{ step.desc }}</p>
+          
+          <a [routerLink]="step.link" class="btn btn-sm btn-outline-primary">
+            Ir a {{ step.title }}
+          </a>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="alert alert-warning mt-4 text-center mb-0">
+    <i class="bi bi-info-circle-fill me-2"></i>Esta guía es referencial. La declaración oficial debe realizarse en los canales autorizados de SUNAT.
+  </div>
+</div>

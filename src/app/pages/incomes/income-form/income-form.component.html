@@ -1,0 +1,81 @@
+<div class="mb-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/incomes" class="text-decoration-none">Mis Ingresos</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Nuevo Ingreso</li>
+    </ol>
+  </nav>
+  <h2 class="fw-bold">Registrar Ingreso</h2>
+</div>
+
+<div class="tf-card" style="max-width: 800px;">
+  <form [formGroup]="incomeForm" (ngSubmit)="onSubmit()">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Tipo de Ingreso</label>
+        <select class="form-select" formControlName="type"
+                [class.is-invalid]="incomeForm.get('type')?.invalid && incomeForm.get('type')?.touched">
+          <option value="Cuarta">Cuarta Categoría (Recibos por Honorarios)</option>
+          <option value="Quinta">Quinta Categoría (Planilla)</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Fecha</label>
+        <input type="date" class="form-control" formControlName="date"
+               [class.is-invalid]="incomeForm.get('date')?.invalid && incomeForm.get('date')?.touched">
+        @if (incomeForm.get('date')?.invalid && incomeForm.get('date')?.touched) {
+          <div class="invalid-feedback">La fecha es requerida.</div>
+        }
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Monto</label>
+        <div class="input-group">
+          <select class="form-select" formControlName="currency" style="max-width: 100px;">
+            <option value="Soles">S/</option>
+            <option value="Dolares">$</option>
+          </select>
+          <input type="number" class="form-control" formControlName="amount" placeholder="0.00" step="0.01"
+                 [class.is-invalid]="incomeForm.get('amount')?.invalid && incomeForm.get('amount')?.touched">
+          @if (incomeForm.get('amount')?.invalid && incomeForm.get('amount')?.touched) {
+            <div class="invalid-feedback">Ingrese un monto válido mayor a 0.</div>
+          }
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-medium">RUC del Pagador (Opcional)</label>
+        <input type="text" class="form-control" formControlName="payerRuc" placeholder="11 dígitos" maxlength="11"
+               [class.is-invalid]="incomeForm.get('payerRuc')?.invalid && incomeForm.get('payerRuc')?.touched">
+        @if (incomeForm.get('payerRuc')?.invalid && incomeForm.get('payerRuc')?.touched) {
+          <div class="invalid-feedback">Debe tener 11 dígitos.</div>
+        }
+      </div>
+
+      <div class="col-12">
+        <label class="form-label fw-medium">Descripción</label>
+        <input type="text" class="form-control" formControlName="description" placeholder="Ej. Servicios profesionales de diseño"
+               [class.is-invalid]="incomeForm.get('description')?.invalid && incomeForm.get('description')?.touched">
+        @if (incomeForm.get('description')?.invalid && incomeForm.get('description')?.touched) {
+          <div class="invalid-feedback">La descripción es requerida.</div>
+        }
+      </div>
+
+      @if (incomeForm.get('type')?.value === 'Cuarta') {
+        <div class="col-12 mt-3">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="retentionSwitch" formControlName="hasRetention">
+            <label class="form-check-label fw-medium" for="retentionSwitch">¿Se aplicó retención del 8%?</label>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <a routerLink="/incomes" class="btn btn-outline-secondary fw-bold">Cancelar</a>
+      <button type="submit" class="btn btn-primary fw-bold">Guardar Ingreso</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,80 @@
+<div class="mb-4">
+  <h2 class="fw-bold">Calendario SUNAT</h2>
+  <p class="text-muted">Consulta tus fechas de vencimiento según el último dígito de tu RUC.</p>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="tf-card h-100">
+      <h5 class="fw-bold mb-4 border-bottom pb-2">Configuración</h5>
+      
+      <div class="mb-3">
+        <label class="form-label fw-medium">Último dígito del RUC</label>
+        <select class="form-select" [(ngModel)]="rucDigit">
+          @for (digit of digits; track digit) {
+            <option [value]="digit">{{ digit }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-medium">Año</label>
+        <select class="form-select" [(ngModel)]="selectedYear">
+          @for (year of years; track year) {
+            <option [value]="year">{{ year }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="alert alert-info border-0 bg-primary bg-opacity-10 text-primary mt-4">
+        <i class="bi bi-info-circle me-2"></i>El cronograma mostrado corresponde a las obligaciones mensuales regulares.
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="tf-card h-100">
+      <h5 class="fw-bold mb-4 border-bottom pb-2">Vencimientos para RUC terminado en {{ rucDigit }}</h5>
+      
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Periodo Tributario</th>
+              <th>Fecha de Vencimiento</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (deadline of filteredDeadlines; track deadline.id) {
+              <tr>
+                <td class="fw-medium">
+                  {{ months[deadline.month - 1].label }} {{ deadline.year }}
+                </td>
+                <td class="fw-bold text-primary">
+                  <i class="bi bi-calendar-event me-2"></i>{{ deadline.deadlineDate | date:'dd/MM/yyyy' }}
+                </td>
+                <td>
+                  <span class="badge" [ngClass]="getStatusClass(deadline.status)">
+                    {{ deadline.status }}
+                  </span>
+                </td>
+              </tr>
+            }
+            @if (filteredDeadlines.length === 0) {
+              <tr>
+                <td colspan="3" class="text-center py-4 text-muted">
+                  No hay vencimientos registrados para este filtro.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-warning mt-4 text-center">
+  <i class="bi bi-info-circle-fill me-2"></i>El cronograma mostrado es referencial y corresponde a obligaciones mensuales simuladas para fines académicos.
+</div>

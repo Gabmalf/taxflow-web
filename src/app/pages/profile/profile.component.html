@@ -1,0 +1,92 @@
+<div class="mb-4">
+  <h2 class="fw-bold">Mi Perfil</h2>
+  <p class="text-muted">Gestiona tu información personal y preferencias.</p>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="tf-card text-center py-5 h-100">
+      <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center mx-auto mb-3" style="width: 100px; height: 100px; font-size: 2.5rem;">
+        {{ user.fullName.charAt(0) }}
+      </div>
+      <h4 class="fw-bold">{{ user.fullName }}</h4>
+      <p class="text-muted mb-2">{{ user.email }}</p>
+      <span class="badge bg-secondary bg-opacity-10 text-secondary mb-4">RUC: {{ user.ruc }}</span>
+      
+      <div>
+        <button class="btn btn-outline-primary w-100" (click)="toggleEdit()">
+          {{ editMode ? 'Guardar Cambios' : 'Editar Perfil' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="tf-card h-100">
+      <h5 class="fw-bold mb-4 border-bottom pb-2">Información Fiscal</h5>
+      
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label text-muted small mb-1">Nombre Completo</label>
+          @if (editMode) {
+            <input type="text" class="form-control" [value]="user.fullName">
+          } @else {
+            <p class="fw-medium mb-0">{{ user.fullName }}</p>
+          }
+        </div>
+        
+        <div class="col-md-6">
+          <label class="form-label text-muted small mb-1">Correo Electrónico</label>
+          @if (editMode) {
+            <input type="email" class="form-control" [value]="user.email">
+          } @else {
+            <p class="fw-medium mb-0">{{ user.email }}</p>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label text-muted small mb-1">Número de RUC</label>
+          @if (editMode) {
+            <input type="text" class="form-control" [value]="user.ruc" maxlength="11">
+          } @else {
+            <p class="fw-medium mb-0">{{ user.ruc }}</p>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label text-muted small mb-1">Último dígito del RUC</label>
+          @if (editMode) {
+            <input type="text" class="form-control" [value]="user.lastDigitRuc" maxlength="1">
+          } @else {
+            <p class="fw-medium mb-0">{{ user.lastDigitRuc }}</p>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label text-muted small mb-1">Tipo de Renta Principal</label>
+          @if (editMode) {
+            <select class="form-select">
+              <option value="Cuarta" [selected]="user.rentType === 'Cuarta'">Cuarta Categoría</option>
+              <option value="Quinta" [selected]="user.rentType === 'Quinta'">Quinta Categoría</option>
+              <option value="Ambas" [selected]="user.rentType === 'Ambas'">Ambas</option>
+            </select>
+          } @else {
+            <p class="fw-medium mb-0">{{ user.rentType }}</p>
+          }
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label text-muted small mb-1">Moneda Preferida</label>
+          @if (editMode) {
+            <select class="form-select">
+              <option value="Soles" [selected]="user.preferredCurrency === 'Soles'">Soles (S/)</option>
+              <option value="Dolares" [selected]="user.preferredCurrency === 'Dolares'">Dólares ($)</option>
+            </select>
+          } @else {
+            <p class="fw-medium mb-0">{{ user.preferredCurrency }}</p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

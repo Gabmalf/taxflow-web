@@ -1,0 +1,38 @@
+<div class="mb-4 d-flex justify-content-between align-items-center">
+  <div>
+    <h2 class="fw-bold mb-1">Reportes</h2>
+    <p class="text-muted mb-0">Resumen mensual de tu actividad tributaria.</p>
+  </div>
+  <button class="btn btn-primary fw-bold" (click)="exportReport()">
+    <i class="bi bi-file-earmark-pdf me-1"></i> Exportar Reporte
+  </button>
+</div>
+
+<div class="tf-card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Periodo</th>
+          <th>Total Ingresos</th>
+          <th>Total Gastos Deducibles</th>
+          <th>Impuesto Estimado</th>
+          <th class="text-end">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (report of reports; track report.month) {
+          <tr>
+            <td class="fw-medium">{{ report.month }} {{ report.year }}</td>
+            <td class="text-primary fw-bold">S/ {{ report.income | number:'1.2-2' }}</td>
+            <td class="text-success fw-bold">S/ {{ report.expense | number:'1.2-2' }}</td>
+            <td class="text-danger fw-bold">S/ {{ report.tax | number:'1.2-2' }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-secondary" (click)="exportReport()">Detalle</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

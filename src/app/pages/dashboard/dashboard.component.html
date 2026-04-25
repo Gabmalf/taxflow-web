@@ -1,0 +1,131 @@
+<div class="mb-4">
+  <h2 class="fw-bold">Dashboard</h2>
+  <p class="text-muted">Resumen de tu situación tributaria actual</p>
+</div>
+
+<!-- Resumen Cards -->
+<div class="row g-4 mb-4">
+  <div class="col-md-6 col-lg-3">
+    <div class="tf-card border-start border-4 border-primary">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small fw-bold text-uppercase">Ingresos (Mes)</p>
+          <h4 class="mb-0 fw-bold">S/ 4,500.00</h4>
+        </div>
+        <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary">
+          <i class="bi bi-wallet2 fs-4"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6 col-lg-3">
+    <div class="tf-card border-start border-4 border-success">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small fw-bold text-uppercase">Gastos Deducibles</p>
+          <h4 class="mb-0 fw-bold">S/ 1,200.00</h4>
+        </div>
+        <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success">
+          <i class="bi bi-receipt fs-4"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="tf-card border-start border-4 border-warning">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small fw-bold text-uppercase">Impuesto Estimado</p>
+          <h4 class="mb-0 fw-bold">S/ 0.00</h4>
+        </div>
+        <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning">
+          <i class="bi bi-calculator fs-4"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="tf-card border-start border-4 border-danger">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small fw-bold text-uppercase">Próximo Vencimiento</p>
+          <h5 class="mb-0 fw-bold">15 May 2026</h5>
+          <small class="text-danger">En 20 días</small>
+        </div>
+        <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger">
+          <i class="bi bi-calendar-event fs-4"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Listas Recientes -->
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="tf-card h-100">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Ingresos Recientes</h5>
+        <a routerLink="/incomes" class="btn btn-sm btn-outline-primary">Ver todos</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10 May 2026</td>
+              <td><span class="badge bg-primary bg-opacity-10 text-primary">Cuarta Categoría</span></td>
+              <td class="fw-bold">S/ 2,500.00</td>
+            </tr>
+            <tr>
+              <td>05 May 2026</td>
+              <td><span class="badge bg-secondary bg-opacity-10 text-secondary">Quinta Categoría</span></td>
+              <td class="fw-bold">S/ 2,000.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="tf-card h-100">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Gastos Recientes</h5>
+        <a routerLink="/expenses" class="btn btn-sm btn-outline-success">Ver todos</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Fecha</th>
+              <th>Categoría</th>
+              <th>Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>12 May 2026</td>
+              <td><span class="badge bg-success bg-opacity-10 text-success">Restaurantes</span></td>
+              <td class="fw-bold">S/ 150.00</td>
+            </tr>
+            <tr>
+              <td>08 May 2026</td>
+              <td><span class="badge bg-success bg-opacity-10 text-success">Servicios Médicos</span></td>
+              <td class="fw-bold">S/ 400.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

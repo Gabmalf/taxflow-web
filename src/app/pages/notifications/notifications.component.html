@@ -1,0 +1,40 @@
+<div class="mb-4 d-flex justify-content-between align-items-center">
+  <div>
+    <h2 class="fw-bold mb-1">Notificaciones</h2>
+    <p class="text-muted mb-0">Mantente al tanto de tus alertas tributarias.</p>
+  </div>
+  <button class="btn btn-outline-primary btn-sm" (click)="markAllAsRead()">Marcar todas como leídas</button>
+</div>
+
+<div class="tf-card p-0 overflow-hidden">
+  <div class="list-group list-group-flush">
+    @for (notif of notifications; track notif.id) {
+      <div class="list-group-item list-group-item-action p-4 border-bottom" [class.bg-light]="!notif.isRead" (click)="markAsRead(notif)" style="cursor: pointer;">
+        <div class="d-flex w-100 justify-content-between align-items-start">
+          <div class="d-flex">
+            <div class="me-3 mt-1">
+              @if (notif.type === 'Vencimiento') {
+                <i class="bi bi-calendar-x text-danger fs-4"></i>
+              } @else if (notif.type === 'Normativa') {
+                <i class="bi bi-book text-info fs-4"></i>
+              } @else if (notif.type === 'Comprobante') {
+                <i class="bi bi-receipt text-success fs-4"></i>
+              } @else {
+                <i class="bi bi-exclamation-triangle text-warning fs-4"></i>
+              }
+            </div>
+            <div>
+              <h6 class="mb-1 fw-bold" [class.text-primary]="!notif.isRead">{{ notif.title }}
+                @if (!notif.isRead) {
+                  <span class="badge bg-danger ms-2 rounded-pill" style="font-size: 0.6rem;">Nueva</span>
+                }
+              </h6>
+              <p class="mb-1 text-muted">{{ notif.message }}</p>
+              <small class="text-secondary">{{ notif.date }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
