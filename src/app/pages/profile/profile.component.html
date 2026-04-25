@@ -3,90 +3,193 @@
   <p class="text-muted">Gestiona tu información personal y preferencias.</p>
 </div>
 
-<div class="row g-4">
-  <div class="col-md-4">
-    <div class="tf-card text-center py-5 h-100">
-      <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center mx-auto mb-3" style="width: 100px; height: 100px; font-size: 2.5rem;">
-        {{ user.fullName.charAt(0) }}
-      </div>
-      <h4 class="fw-bold">{{ user.fullName }}</h4>
-      <p class="text-muted mb-2">{{ user.email }}</p>
-      <span class="badge bg-secondary bg-opacity-10 text-secondary mb-4">RUC: {{ user.ruc }}</span>
-      
-      <div>
-        <button class="btn btn-outline-primary w-100" (click)="toggleEdit()">
-          {{ editMode ? 'Guardar Cambios' : 'Editar Perfil' }}
-        </button>
-      </div>
-    </div>
+@if (saveSuccess) {
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="bi bi-check-circle me-2"></i> Cambios guardados correctamente.
+    <button type="button" class="btn-close" (click)="saveSuccess = false" aria-label="Cerrar"></button>
   </div>
+}
 
-  <div class="col-md-8">
-    <div class="tf-card h-100">
-      <h5 class="fw-bold mb-4 border-bottom pb-2">Información Fiscal</h5>
-      
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label text-muted small mb-1">Nombre Completo</label>
-          @if (editMode) {
-            <input type="text" class="form-control" [value]="user.fullName">
-          } @else {
-            <p class="fw-medium mb-0">{{ user.fullName }}</p>
-          }
-        </div>
-        
-        <div class="col-md-6">
-          <label class="form-label text-muted small mb-1">Correo Electrónico</label>
-          @if (editMode) {
-            <input type="email" class="form-control" [value]="user.email">
-          } @else {
-            <p class="fw-medium mb-0">{{ user.email }}</p>
-          }
-        </div>
+@if (saveError) {
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle me-2"></i> Hay campos pendientes o con errores. Revisa los marcados en rojo.
+    <button type="button" class="btn-close" (click)="saveError = false" aria-label="Cerrar"></button>
+  </div>
+}
 
-        <div class="col-md-6">
-          <label class="form-label text-muted small mb-1">Número de RUC</label>
-          @if (editMode) {
-            <input type="text" class="form-control" [value]="user.ruc" maxlength="11">
-          } @else {
-            <p class="fw-medium mb-0">{{ user.ruc }}</p>
-          }
+<form [formGroup]="form" (ngSubmit)="save()" novalidate>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="tf-card text-center py-5 h-100">
+        <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center mx-auto mb-3" style="width: 100px; height: 100px; font-size: 2.5rem;">
+          {{ user.fullName.charAt(0) }}
         </div>
+        <h4 class="fw-bold">{{ user.fullName }}</h4>
+        <p class="text-muted mb-2">{{ user.email }}</p>
+        <span class="badge bg-secondary bg-opacity-10 text-secondary mb-4">RUC: {{ user.ruc }}</span>
 
-        <div class="col-md-6">
-          <label class="form-label text-muted small mb-1">Último dígito del RUC</label>
+        <div class="d-grid gap-2">
           @if (editMode) {
-            <input type="text" class="form-control" [value]="user.lastDigitRuc" maxlength="1">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-lg me-1"></i> Guardar Cambios
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">
+              Cancelar
+            </button>
           } @else {
-            <p class="fw-medium mb-0">{{ user.lastDigitRuc }}</p>
-          }
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label text-muted small mb-1">Tipo de Renta Principal</label>
-          @if (editMode) {
-            <select class="form-select">
-              <option value="Cuarta" [selected]="user.rentType === 'Cuarta'">Cuarta Categoría</option>
-              <option value="Quinta" [selected]="user.rentType === 'Quinta'">Quinta Categoría</option>
-              <option value="Ambas" [selected]="user.rentType === 'Ambas'">Ambas</option>
-            </select>
-          } @else {
-            <p class="fw-medium mb-0">{{ user.rentType }}</p>
-          }
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label text-muted small mb-1">Moneda Preferida</label>
-          @if (editMode) {
-            <select class="form-select">
-              <option value="Soles" [selected]="user.preferredCurrency === 'Soles'">Soles (S/)</option>
-              <option value="Dolares" [selected]="user.preferredCurrency === 'Dolares'">Dólares ($)</option>
-            </select>
-          } @else {
-            <p class="fw-medium mb-0">{{ user.preferredCurrency }}</p>
+            <button type="button" class="btn btn-outline-primary" (click)="enterEditMode()">
+              <i class="bi bi-pencil me-1"></i> Editar Perfil
+            </button>
           }
         </div>
       </div>
     </div>
+
+    <div class="col-md-8">
+      <div class="tf-card h-100">
+        <h5 class="fw-bold mb-4 border-bottom pb-2">Información Fiscal</h5>
+
+        <div class="row g-3">
+          <!-- Nombre Completo -->
+          <div class="col-md-6">
+            <label for="fullName" class="form-label text-muted small mb-1">
+              Nombre Completo <span class="text-danger">*</span>
+            </label>
+            @if (editMode) {
+              <input
+                id="fullName"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="isInvalid('fullName')"
+                formControlName="fullName">
+              @if (hasError('fullName', 'required')) {
+                <div class="invalid-feedback">El nombre es obligatorio.</div>
+              }
+              @if (hasError('fullName', 'minlength')) {
+                <div class="invalid-feedback">Debe tener al menos 3 caracteres.</div>
+              }
+            } @else {
+              <p class="fw-medium mb-0">{{ user.fullName }}</p>
+            }
+          </div>
+
+          <!-- Correo -->
+          <div class="col-md-6">
+            <label for="email" class="form-label text-muted small mb-1">
+              Correo Electrónico <span class="text-danger">*</span>
+            </label>
+            @if (editMode) {
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                [class.is-invalid]="isInvalid('email')"
+                formControlName="email">
+              @if (hasError('email', 'required')) {
+                <div class="invalid-feedback">El correo es obligatorio.</div>
+              }
+              @if (hasError('email', 'email')) {
+                <div class="invalid-feedback">Ingresa un correo válido.</div>
+              }
+            } @else {
+              <p class="fw-medium mb-0">{{ user.email }}</p>
+            }
+          </div>
+
+          <!-- RUC -->
+          <div class="col-md-6">
+            <label for="ruc" class="form-label text-muted small mb-1">
+              Número de RUC <span class="text-danger">*</span>
+            </label>
+            @if (editMode) {
+              <input
+                id="ruc"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="isInvalid('ruc')"
+                formControlName="ruc"
+                maxlength="11">
+              @if (hasError('ruc', 'required')) {
+                <div class="invalid-feedback">El RUC es obligatorio.</div>
+              }
+              @if (hasError('ruc', 'pattern')) {
+                <div class="invalid-feedback">El RUC debe tener 11 dígitos numéricos.</div>
+              }
+            } @else {
+              <p class="fw-medium mb-0">{{ user.ruc }}</p>
+            }
+          </div>
+
+          <!-- Último dígito RUC -->
+          <div class="col-md-6">
+            <label for="lastDigitRuc" class="form-label text-muted small mb-1">
+              Último dígito del RUC <span class="text-danger">*</span>
+            </label>
+            @if (editMode) {
+              <input
+                id="lastDigitRuc"
+                type="text"
+                class="form-control"
+                [class.is-invalid]="isInvalid('lastDigitRuc')"
+                formControlName="lastDigitRuc"
+                maxlength="1">
+              @if (hasError('lastDigitRuc', 'required')) {
+                <div class="invalid-feedback">Este campo es obligatorio.</div>
+              }
+              @if (hasError('lastDigitRuc', 'pattern')) {
+                <div class="invalid-feedback">Debe ser un dígito (0-9).</div>
+              }
+            } @else {
+              <p class="fw-medium mb-0">{{ user.lastDigitRuc }}</p>
+            }
+          </div>
+
+          <!-- Tipo de Renta -->
+          <div class="col-md-6">
+            <label for="rentType" class="form-label text-muted small mb-1">
+              Tipo de Renta Principal <span class="text-danger">*</span>
+            </label>
+            @if (editMode) {
+              <select
+                id="rentType"
+                class="form-select"
+                [class.is-invalid]="isInvalid('rentType')"
+                formControlName="rentType">
+                <option value="Cuarta">Cuarta Categoría</option>
+                <option value="Quinta">Quinta Categoría</option>
+                <option value="Ambas">Ambas</option>
+              </select>
+              @if (hasError('rentType', 'required')) {
+                <div class="invalid-feedback">Selecciona un tipo de renta.</div>
+              }
+            } @else {
+              <p class="fw-medium mb-0">{{ user.rentType }}</p>
+            }
+          </div>
+
+          <!-- Moneda Preferida -->
+          <div class="col-md-6">
+            <label for="preferredCurrency" class="form-label text-muted small mb-1">
+              Moneda Preferida <span class="text-danger">*</span>
+            </label>
+            @if (editMode) {
+              <select
+                id="preferredCurrency"
+                class="form-select"
+                [class.is-invalid]="isInvalid('preferredCurrency')"
+                formControlName="preferredCurrency">
+                <option value="Soles">Soles (S/)</option>
+                <option value="Dolares">Dólares ($)</option>
+              </select>
+              @if (hasError('preferredCurrency', 'required')) {
+                <div class="invalid-feedback">Selecciona una moneda.</div>
+              }
+            } @else {
+              <p class="fw-medium mb-0">{{ user.preferredCurrency }}</p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</form>
