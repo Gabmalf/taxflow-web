@@ -6,6 +6,7 @@ import { PrivateLayoutComponent } from './layouts/private-layout/private-layout.
 import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
 import { ForgotPasswordComponent } from './pages/auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './pages/auth/reset-password/reset-password.component';
 import { LandingComponent } from './pages/landing/landing.component';
 
 // Private pages
@@ -35,6 +36,8 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
+      { path: 'reset-password', component: ResetPasswordComponent },
+      { path: 'reset-password/:token', component: ResetPasswordComponent },
     ]
   },
   {
