@@ -1,6 +1,16 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom px-4 py-2 tf-card m-3 rounded-3 shadow-sm">
   <div class="container-fluid">
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center gap-3">
+      <button
+        type="button"
+        class="btn btn-link text-secondary p-0 fs-4 lh-1"
+        (click)="toggleSidebar()"
+        [attr.aria-expanded]="!sidebarCollapsed()"
+        aria-controls="app-sidebar"
+        aria-label="Alternar menú lateral"
+        title="Alternar menú">
+        <i class="bi" [class.bi-list]="sidebarCollapsed()" [class.bi-x-lg]="!sidebarCollapsed()"></i>
+      </button>
       <h5 class="mb-0 text-muted d-none d-md-block">Bienvenido, Gabriel</h5>
     </div>
     

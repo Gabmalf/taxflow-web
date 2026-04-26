@@ -26,6 +26,29 @@ export class ExpenseFormComponent {
     'Otros gastos deducibles'
   ];
 
+  private readonly allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
+  selectedFileName: string | null = null;
+  fileError: string | null = null;
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    this.fileError = null;
+    this.selectedFileName = null;
+
+    if (!file) return;
+
+    const extension = file.name.split('.').pop()?.toLowerCase() ?? '';
+    if (!this.allowedExtensions.includes(extension)) {
+      this.fileError = 'Solo se permiten archivos PDF, JPG o PNG.';
+      input.value = '';
+      return;
+    }
+
+    this.selectedFileName = file.name;
+  }
+
   constructor() {
     this.expenseForm = this.fb.group({
       category: ['', Validators.required],
