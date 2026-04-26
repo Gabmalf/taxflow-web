@@ -16,45 +16,139 @@
       <p class="text-muted">Comienza registrando tu primer ingreso.</p>
     </div>
   } @else {
-    <div class="table-responsive">
-      <table class="table table-hover align-middle">
-        <thead class="table-light">
-          <tr>
-            <th>Fecha</th>
-            <th>Tipo</th>
-            <th>Descripción</th>
-            <th>Monto</th>
-            <th>Retención</th>
-            <th class="text-end">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (income of incomes; track income.id) {
-            <tr>
-              <td>{{ income.date }}</td>
-              <td>
-                <span class="badge" [class.bg-primary]="income.type === 'Cuarta'" [class.bg-secondary]="income.type === 'Quinta'" [class.bg-dark]="income.type === 'Otro'">
-                  {{ income.type }}
-                </span>
-              </td>
-              <td>{{ income.description }}</td>
-              <td class="fw-bold">{{ income.currency === 'Soles' ? 'S/' : '$' }} {{ income.amount | number:'1.2-2' }}</td>
-              <td>
-                @if (income.hasRetention) {
-                  <span class="badge bg-success bg-opacity-10 text-success"><i class="bi bi-check-circle me-1"></i>Sí</span>
-                } @else {
-                  <span class="badge bg-danger bg-opacity-10 text-danger"><i class="bi bi-x-circle me-1"></i>No</span>
-                }
-              </td>
-              <td class="text-end">
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteIncome(income.id)">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+    <div class="income-filters border-bottom pb-4 mb-4">
+      <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-3">
+        <div>
+          <h5 class="fw-bold mb-1">Filtra tu historial</h5>
+          <p class="text-muted mb-0">Encuentra ingresos por periodo, tipo, retención, moneda o texto.</p>
+        </div>
+
+        <div class="filter-summary">
+          <span class="filter-summary__count">{{ filteredIncomes.length }}</span>
+          <span class="text-muted">de {{ incomes.length }} ingresos visibles</span>
+        </div>
+      </div>
+
+      <div class="row g-3 align-items-end">
+        <div class="col-lg-4">
+          <label class="form-label fw-medium">Buscar</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white">
+              <i class="bi bi-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="searchTerm"
+              (ngModelChange)="applyFilters()"
+              placeholder="Descripción, RUC o tipo"
+            >
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-2">
+          <label class="form-label fw-medium">Periodo</label>
+          <select class="form-select" [(ngModel)]="selectedPeriod" (ngModelChange)="applyFilters()">
+            <option value="all">Todos</option>
+            @for (period of periodOptions; track period.value) {
+              <option [value]="period.value">{{ period.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="col-sm-6 col-lg-2">
+          <label class="form-label fw-medium">Tipo</label>
+          <select class="form-select" [(ngModel)]="selectedType" (ngModelChange)="applyFilters()">
+            @for (option of typeOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="col-sm-6 col-lg-2">
+          <label class="form-label fw-medium">Retención</label>
+          <select class="form-select" [(ngModel)]="selectedRetention" (ngModelChange)="applyFilters()">
+            @for (option of retentionOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="col-sm-6 col-lg-2">
+          <label class="form-label fw-medium">Moneda</label>
+          <select class="form-select" [(ngModel)]="selectedCurrency" (ngModelChange)="applyFilters()">
+            @for (option of currencyOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      @if (hasActiveFilters) {
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+          <small class="text-muted">Se aplicaron filtros a la tabla de ingresos.</small>
+          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="resetFilters()">
+            <i class="bi bi-arrow-counterclockwise me-1"></i> Limpiar filtros
+          </button>
+        </div>
+      }
     </div>
+
+    @if (filteredIncomes.length === 0) {
+      <div class="empty-filter-state text-center py-5 px-4">
+        <i class="bi bi-funnel fs-1 text-muted mb-3"></i>
+        <h5 class="fw-bold mb-2">No encontramos ingresos con esos filtros</h5>
+        <p class="text-muted mb-3">Prueba otro periodo, cambia el tipo o limpia la búsqueda para ver más resultados.</p>
+        <button type="button" class="btn btn-outline-secondary fw-medium" (click)="resetFilters()">
+          Limpiar filtros
+        </button>
+      </div>
+    } @else {
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Descripción</th>
+              <th>Monto</th>
+              <th>Retención</th>
+              <th class="text-end">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (income of filteredIncomes; track income.id) {
+              <tr>
+                <td>{{ income.date | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  <span class="badge" [class.bg-primary]="income.type === 'Cuarta'" [class.bg-secondary]="income.type === 'Quinta'" [class.bg-dark]="income.type === 'Otro'">
+                    {{ income.type }}
+                  </span>
+                </td>
+                <td>
+                  <div class="fw-medium">{{ income.description }}</div>
+                  @if (income.payerRuc) {
+                    <small class="text-muted">RUC: {{ income.payerRuc }}</small>
+                  }
+                </td>
+                <td class="fw-bold">{{ income.currency === 'Soles' ? 'S/' : '$' }} {{ income.amount | number:'1.2-2' }}</td>
+                <td>
+                  @if (income.hasRetention) {
+                    <span class="badge bg-success bg-opacity-10 text-success"><i class="bi bi-check-circle me-1"></i>Sí</span>
+                  } @else {
+                    <span class="badge bg-danger bg-opacity-10 text-danger"><i class="bi bi-x-circle me-1"></i>No</span>
+                  }
+                </td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteIncome(income.id)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
   }
 </div>

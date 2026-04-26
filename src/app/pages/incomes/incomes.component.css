@@ -1,0 +1,40 @@
+.income-filters {
+  margin-bottom: 1rem;
+}
+
+.filter-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-radius: 1rem;
+  background: rgba(13, 110, 253, 0.08);
+}
+
+.filter-summary__count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--bs-primary);
+}
+
+.input-group-text {
+  border-right: 0;
+}
+
+.input-group .form-control {
+  border-left: 0;
+}
+
+.empty-filter-state {
+  border: 1px dashed rgba(108, 117, 125, 0.35);
+  border-radius: 1rem;
+  background: rgba(248, 249, 250, 0.9);
+}
+
+@media (max-width: 991.98px) {
+  .filter-summary {
+    width: 100%;
+    justify-content: center;
+  }
+}
