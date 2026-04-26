@@ -1,25 +1,30 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NotificationService, Notification } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css'
 })
 export class NotificationsComponent {
-  notifications = [
-    { id: 1, title: 'Vencimiento próximo', message: 'Tu declaración mensual vence en 5 días.', type: 'Vencimiento', date: 'Hace 2 horas', isRead: false },
-    { id: 2, title: 'Nueva normativa', message: 'Se ha actualizado el valor de la UIT para 2026.', type: 'Normativa', date: 'Hace 1 día', isRead: false },
-    { id: 3, title: 'Comprobante registrado', message: 'Tu factura de restaurante ha sido procesada correctamente.', type: 'Comprobante', date: 'Hace 3 días', isRead: true },
-    { id: 4, title: 'Simulación incompleta', message: 'Tienes datos pendientes en tu simulador tributario.', type: 'Alerta', date: 'Hace 1 semana', isRead: true }
-  ];
 
-  markAsRead(notif: any) {
-    notif.isRead = true;
+  notifications: Notification[] = [];
+
+  constructor(private notificationService: NotificationService) {
+    this.notificationService.notifications$
+      .subscribe((n: Notification[]) => this.notifications = n);
   }
 
-  markAllAsRead() {
-    this.notifications.forEach(n => n.isRead = true);
+  markAsRead(notif: Notification): void {
+    if (!notif.isRead) {
+      this.notificationService.markAsRead(notif.id);
+    }
+  }
+
+  markAllAsRead(): void {
+    this.notificationService.markAllAsRead();
   }
 }
