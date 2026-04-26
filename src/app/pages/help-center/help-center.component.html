@@ -39,28 +39,28 @@
   </div>
 
   <div class="col-lg-5">
-    <div class="tf-card h-100 bg-primary text-white">
-      <h5 class="fw-bold mb-4">Consulta Tributaria</h5>
-      <p class="small text-light mb-4">Si tienes un caso específico, escríbenos y un experto tributario te orientará.</p>
+    <div class="tf-card h-100 help-form-card">
+      <h5 class="fw-bold mb-4 help-form-title">Consulta Tributaria</h5>
+      <p class="small text-muted mb-4">Si tienes un caso específico, escríbenos y un experto tributario te orientará.</p>
       
       <form (submit)="submitQuery(); $event.preventDefault()">
         <div class="mb-3">
-          <label class="form-label small">Asunto</label>
-          <input type="text" class="form-control bg-white bg-opacity-25 text-white border-0" placeholder="Ej. Consulta sobre rentas" required>
+          <label class="form-label small help-form-label">Asunto</label>
+          <input type="text" class="form-control help-form-input" placeholder="Ej. Consulta sobre rentas" required>
         </div>
         <div class="mb-3">
-          <label class="form-label small">Categoría</label>
-          <select class="form-select bg-white bg-opacity-25 text-white border-0" required>
-            <option class="text-dark" value="1">Deducciones</option>
-            <option class="text-dark" value="2">Ingresos</option>
-            <option class="text-dark" value="3">Plataforma SUNAT</option>
+          <label class="form-label small help-form-label">Categoría</label>
+          <select class="form-select help-form-input" required>
+            <option value="1">Deducciones</option>
+            <option value="2">Ingresos</option>
+            <option value="3">Plataforma SUNAT</option>
           </select>
         </div>
         <div class="mb-4">
-          <label class="form-label small">Mensaje</label>
-          <textarea class="form-control bg-white bg-opacity-25 text-white border-0" rows="4" placeholder="Escribe tu consulta aquí..." required></textarea>
+          <label class="form-label small help-form-label">Mensaje</label>
+          <textarea class="form-control help-form-input" rows="4" placeholder="Escribe tu consulta aquí..." required></textarea>
         </div>
-        <button type="submit" class="btn btn-secondary fw-bold w-100">Enviar Consulta</button>
+        <button type="submit" class="btn help-form-btn fw-bold w-100">Enviar Consulta</button>
       </form>
     </div>
   </div>
