@@ -1,1 +1,15 @@
-<p>notification-bell works!</p>
+<div
+  class="notification-bell position-relative text-secondary"
+  style="cursor: pointer;"
+  (click)="goToNotifications()"
+>
+  <i class="bi bi-bell fs-5"></i>
+
+  <span
+    *ngIf="unreadCount > 0"
+    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+    style="font-size: 0.6rem;"
+  >
+    {{ unreadCount }}
+  </span>
+</div>
