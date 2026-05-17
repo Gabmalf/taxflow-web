@@ -1,0 +1,199 @@
+/* ===== HERO SECTION ===== */
+.landing-hero {
+  background: linear-gradient(135deg, #0A2540 0%, #0f3460 40%, #1976D2 100%);
+  position: relative;
+  overflow: hidden;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-bg-pattern {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(0, 180, 216, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(25, 118, 210, 0.20) 0%, transparent 50%),
+    radial-gradient(circle at 60% 90%, rgba(0, 180, 216, 0.10) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* ===== NAV BUTTONS ===== */
+.landing-btn-outline {
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 0.45rem 1.25rem;
+  backdrop-filter: blur(4px);
+  transition: all 0.25s ease;
+}
+
+.landing-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #fff;
+  color: #fff;
+}
+
+.landing-btn-accent {
+  background: #00B4D8;
+  border: 2px solid #00B4D8;
+  border-radius: 8px;
+  padding: 0.45rem 1.25rem;
+  transition: all 0.25s ease;
+}
+
+.landing-btn-accent:hover {
+  background: #0096B4;
+  border-color: #0096B4;
+  color: #fff;
+}
+
+/* ===== HERO CONTENT ===== */
+.landing-badge {
+  background: rgba(0, 180, 216, 0.2);
+  color: #67daf5;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(0, 180, 216, 0.25);
+}
+
+.landing-highlight {
+  background: linear-gradient(90deg, #00B4D8, #67daf5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.landing-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hero CTA Buttons */
+.landing-btn-cta {
+  background: #00B4D8;
+  color: #fff;
+  border: 2px solid #00B4D8;
+  border-radius: 10px;
+  padding: 0.65rem 1.75rem;
+  box-shadow: 0 4px 20px rgba(0, 180, 216, 0.35);
+  transition: all 0.3s ease;
+}
+
+.landing-btn-cta:hover {
+  background: #0096B4;
+  border-color: #0096B4;
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(0, 180, 216, 0.45);
+  transform: translateY(-2px);
+}
+
+.landing-btn-ghost {
+  color: rgba(255, 255, 255, 0.85);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 0.65rem 1.75rem;
+  transition: all 0.3s ease;
+}
+
+.landing-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+/* ===== FEATURES SECTION ===== */
+.landing-features {
+  background: linear-gradient(180deg, #F0F4F8 0%, #F8F9FA 100%);
+  position: relative;
+}
+
+.landing-features::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(180deg, #0A2540 0%, transparent 100%);
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.landing-feature-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(10, 37, 64, 0.06), 0 1px 4px rgba(10, 37, 64, 0.04);
+  border: 1px solid rgba(10, 37, 64, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.landing-feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(10, 37, 64, 0.10), 0 2px 8px rgba(10, 37, 64, 0.06);
+}
+
+.landing-icon-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.landing-icon-primary {
+  background: rgba(25, 118, 210, 0.1);
+  color: #1976D2;
+}
+
+.landing-icon-secondary {
+  background: rgba(0, 180, 216, 0.1);
+  color: #00B4D8;
+}
+
+.landing-icon-accent {
+  background: rgba(10, 37, 64, 0.08);
+  color: #0A2540;
+}
+
+/* ===== FOOTER ===== */
+.landing-footer {
+  background: #0A2540;
+  padding: 2rem 0;
+}
+
+.landing-footer-icon {
+  color: #00B4D8;
+}
+
+.landing-footer-text {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .landing-hero {
+    min-height: auto;
+    padding-bottom: 3rem;
+  }
+
+  .landing-hero h1 {
+    font-size: 2rem;
+  }
+
+  .landing-hero .lead {
+    font-size: 1rem;
+  }
+
+  .landing-btn-cta,
+  .landing-btn-ghost {
+    padding: 0.55rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}
