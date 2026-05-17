@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { ConsultationService } from '../../core/services/consultation.service';
 
 @Component({
   selector: 'app-help-center',
@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './help-center.component.css'
 })
 export class HelpCenterComponent {
-  private http = inject(HttpClient);
+  private consultationService = inject(ConsultationService);
   
   formData = {
     asunto: '',
@@ -28,23 +28,20 @@ export class HelpCenterComponent {
     this.successMessage = '';
     this.errorMessage = '';
 
-    const payload = {
-      asunto: this.formData.asunto,
-      categoria: this.formData.categoria,
-      mensaje: this.formData.mensaje
-    };
-
-    this.http.post('https://le7uyeu46a.execute-api.us-east-1.amazonaws.com/consultas', payload)
+    this.consultationService.submitConsultation(this.formData)
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.isLoading = false;
-          this.successMessage = 'Tu consulta ha sido guardada en la base de datos. Te responderemos en breve.';
+          this.successMessage = res.message || 'Tu consulta ha sido guardada correctamente. Te responderemos en breve.';
           this.formData = { asunto: '', categoria: 'Deducciones', mensaje: '' };
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = 'Hubo un error al guardar la consulta. Por favor, asegúrate de haber desplegado la Lambda consultas_lambda.py.';
-          console.error(err);
+          const serverMsg = err.error?.message;
+          this.errorMessage = serverMsg 
+            ? `Error: ${serverMsg}` 
+            : 'Hubo un error al enviar la consulta. Verifica tu conexión e intenta de nuevo.';
+          console.error('Error en consulta:', err);
         }
       });
   }

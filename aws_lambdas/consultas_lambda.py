@@ -42,6 +42,17 @@ def lambda_handler(event, context):
         http_method = event['requestContext']['http'].get('method')
     if not http_method:
         http_method = 'POST'
+        
+    if http_method == 'OPTIONS':
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE",
+                "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token"
+            },
+            "body": ""
+        }
 
     user = verify_jwt(auth_header)
     if not user:
@@ -73,6 +84,13 @@ def lambda_handler(event, context):
                     mensaje TEXT NOT NULL,
                     fecha_creacion DATETIME DEFAULT GETDATE()
                 )
+            """)
+            
+            # Agregar columna categoria si la tabla ya existía sin ella
+            cursor.execute("""
+                IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS 
+                               WHERE TABLE_NAME = 'consultas_soporte' AND COLUMN_NAME = 'categoria')
+                ALTER TABLE consultas_soporte ADD categoria VARCHAR(100)
             """)
             
             cursor.execute("""
