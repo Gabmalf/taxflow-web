@@ -75,18 +75,22 @@ export class IncomesComponent implements OnInit {
   }
 
   loadIncomes() {
-    this.incomes = this.incomeService
-      .getIncomes()
-      .sort((a, b) => this.compareByDateDesc(a, b));
-
-    this.updatePeriodOptions();
-    this.applyFilters();
+    this.incomeService.getIncomes().subscribe({
+      next: (data) => {
+        this.incomes = data.sort((a, b) => this.compareByDateDesc(a, b));
+        this.updatePeriodOptions();
+        this.applyFilters();
+      },
+      error: (err) => console.error('Error loading incomes', err)
+    });
   }
 
   deleteIncome(id: string) {
     if (confirm('¿Estás seguro de eliminar este ingreso?')) {
-      this.incomeService.deleteIncome(id);
-      this.loadIncomes();
+      this.incomeService.deleteIncome(id).subscribe({
+        next: () => this.loadIncomes(),
+        error: (err) => console.error('Error deleting income', err)
+      });
     }
   }
 

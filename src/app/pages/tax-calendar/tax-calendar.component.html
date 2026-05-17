@@ -10,11 +10,7 @@
       
       <div class="mb-3">
         <label class="form-label fw-medium">Último dígito del RUC</label>
-        <select class="form-select" [(ngModel)]="rucDigit">
-          @for (digit of digits; track digit) {
-            <option [value]="digit">{{ digit }}</option>
-          }
-        </select>
+        <input type="text" class="form-control bg-light" [value]="rucDigit" readonly>
       </div>
 
       <div class="mb-3">

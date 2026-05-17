@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Deadline } from '../../core/models/models';
+import { CalendarService } from '../../core/services/calendar.service';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-tax-calendar',
@@ -11,6 +13,9 @@ import { Deadline } from '../../core/models/models';
   styleUrl: './tax-calendar.component.css'
 })
 export class TaxCalendarComponent implements OnInit {
+  private calendarService = inject(CalendarService);
+  private userService = inject(UserService);
+
   selectedMonth = new Date().getMonth() + 1;
   selectedYear = 2026;
   rucDigit = '1';
@@ -35,66 +40,77 @@ export class TaxCalendarComponent implements OnInit {
   mockDeadlines: Deadline[] = [];
 
   ngOnInit() {
-    this.generateMockDeadlines();
+    const user = this.userService.getUser();
+    this.rucDigit = user.lastDigitRuc?.toString() || '1';
+
+    // Fetch the calendar but we will dynamically override it 
+    // to simulate real dates based on current date for academic purposes.
+    this.calendarService.getCalendar().subscribe({
+      next: (data) => {
+        this.generateDynamicCalendar();
+      },
+      error: (err) => {
+        console.error('Error fetching calendar', err);
+        this.generateDynamicCalendar();
+      }
+    });
   }
 
-  generateMockDeadlines() {
-    this.mockDeadlines = [];
-    let idCounter = 1;
+  generateDynamicCalendar() {
+    const year = Number(this.selectedYear);
+    const digit = Number(this.rucDigit);
     const today = new Date();
+    today.setHours(0,0,0,0);
     
-    for (let year of this.years) {
-      for (let d = 0; d <= 9; d++) {
-        for (let m = 1; m <= 12; m++) {
-          // El vencimiento suele ser al mes siguiente
-          const dueMonth = m === 12 ? 1 : m + 1;
-          const dueYear = m === 12 ? year + 1 : year;
-          const dueDay = 12 + d; // Días simulados: 12 al 21
-          
-          const deadlineDate = new Date(dueYear, dueMonth - 1, dueDay);
-          let status: 'Pendiente' | 'Proximo' | 'Vencido' | 'Cumplido';
-          
-          const diffTime = deadlineDate.getTime() - today.getTime();
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          
-          if (diffDays < 0) {
-            status = 'Vencido';
-            // Aleatoriamente marcar algunos como cumplidos si ya pasaron
-            if (m % 2 === 0) status = 'Cumplido'; 
-          } else if (diffDays <= 15) {
-            status = 'Proximo';
-          } else {
-            status = 'Pendiente';
-          }
-
-          const dateString = `${dueYear}-${String(dueMonth).padStart(2, '0')}-${String(dueDay).padStart(2, '0')}T00:00:00`;
-          
-          this.mockDeadlines.push({
-            id: (idCounter++).toString(),
-            month: m,
-            year: year,
-            lastDigit: d,
-            deadlineDate: dateString,
-            status: status
-          });
-        }
+    this.mockDeadlines = [];
+    
+    for (let month = 1; month <= 12; month++) {
+      let dueMonth = month; 
+      let dueYear = year;
+      if (dueMonth === 12) {
+        dueMonth = 0;
+        dueYear++;
       }
+      
+      const dueDate = new Date(dueYear, dueMonth, 14 + digit);
+      dueDate.setHours(0,0,0,0);
+      
+      let status: 'Pendiente' | 'Proximo' | 'Vencido' | 'Cumplido' = 'Pendiente';
+      const timeDiff = dueDate.getTime() - today.getTime();
+      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      
+      if (daysDiff < 0) {
+        status = 'Vencido';
+      } else if (daysDiff <= 15) {
+        status = 'Proximo';
+      } else {
+        status = 'Pendiente';
+      }
+
+      this.mockDeadlines.push({
+        id: month.toString(),
+        month: month,
+        year: year,
+        lastDigit: digit,
+        deadlineDate: dueDate.toISOString(),
+        status: status
+      });
     }
   }
 
   get filteredDeadlines() {
-    return this.mockDeadlines.filter(d => 
-      d.lastDigit.toString() === this.rucDigit &&
-      d.year === Number(this.selectedYear)
-    ).sort((a, b) => a.month - b.month);
+    if (this.mockDeadlines.length === 0 || this.mockDeadlines[0].year !== Number(this.selectedYear)) {
+      this.generateDynamicCalendar();
+    }
+    return this.mockDeadlines;
   }
 
   getStatusClass(status: string) {
-    switch (status) {
-      case 'Pendiente': return 'bg-secondary';
-      case 'Proximo': return 'bg-warning text-dark';
-      case 'Vencido': return 'bg-danger';
-      case 'Cumplido': return 'bg-success';
+    switch (status.toLowerCase()) {
+      case 'pendiente': return 'bg-secondary';
+      case 'proximo': return 'bg-warning text-dark';
+      case 'vencido': return 'bg-danger';
+      case 'cumplido': return 'bg-success';
       default: return 'bg-primary';
     }
   }

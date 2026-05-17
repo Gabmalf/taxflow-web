@@ -20,13 +20,20 @@ export class ExpensesComponent implements OnInit {
   }
 
   loadExpenses() {
-    this.expenses = this.expenseService.getExpenses();
+    this.expenseService.getExpenses().subscribe({
+      next: (data) => {
+        this.expenses = data;
+      },
+      error: (err) => console.error('Error loading expenses', err)
+    });
   }
 
   deleteExpense(id: string) {
     if (confirm('¿Estás seguro de eliminar este gasto deducible?')) {
-      this.expenseService.deleteExpense(id);
-      this.loadExpenses();
+      this.expenseService.deleteExpense(id).subscribe({
+        next: () => this.loadExpenses(),
+        error: (err) => console.error('Error deleting expense', err)
+      });
     }
   }
 }

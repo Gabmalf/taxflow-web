@@ -1,42 +1,53 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Expense } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExpenseService {
-  private storageKey = 'taxflow_expenses';
+  private http = inject(HttpClient);
+  private apiUrl = 'https://le7uyeu46a.execute-api.us-east-1.amazonaws.com/gastos';
 
-  constructor() {
-    this.initMockData();
+  getExpenses(): Observable<Expense[]> {
+    return this.http.get<{status: string, data: any[]}>(this.apiUrl).pipe(
+      map(res => res.data.map(d => ({
+        id: d.id.toString(),
+        category: d.categoria,
+        date: d.fecha_gasto,
+        amount: d.monto_total,
+        deducibleAmount: d.monto_deducible || 0,
+        currency: 'Soles', // Mapping for UI
+        description: '', // g.descripcion no existe en DB, pero lo mapeamos para no romper UI
+        providerRuc: '',
+        receiptType: ''
+      })))
+    );
   }
 
-  private initMockData() {
-    if (!localStorage.getItem(this.storageKey)) {
-      const mockExpenses: Expense[] = [
-        { id: '1', category: 'Restaurantes y hoteles', date: '2026-05-12', amount: 150, currency: 'Soles', description: 'Cena de negocios', providerRuc: '20123456789', receiptType: 'Factura Electrónica' },
-        { id: '2', category: 'Servicios médicos', date: '2026-05-08', amount: 400, currency: 'Soles', description: 'Consulta odontológica', providerRuc: '10987654321', receiptType: 'Recibo por Honorarios' },
-        { id: '3', category: 'Alquiler de inmueble', date: '2026-05-01', amount: 1200, currency: 'Soles', description: 'Alquiler oficina', providerRuc: '20555555555', receiptType: 'Formulario 1683' }
-      ];
-      localStorage.setItem(this.storageKey, JSON.stringify(mockExpenses));
-    }
+  addExpense(expense: any): Observable<any> {
+    const categoryMap: Record<string, number> = {
+      'Restaurantes y hoteles': 1,
+      'Servicios médicos': 2,
+      'Servicios odontológicos': 3,
+      'Alquiler de inmueble': 4,
+      'Servicios profesionales': 5,
+      'Aportes a EsSalud de trabajadores del hogar': 6,
+      'Otros gastos deducibles': 7
+    };
+    
+    const payload = {
+      categoria_gasto_id: categoryMap[expense.category] || 1,
+      monto_total: expense.amount,
+      monto_deducible: expense.amount * 0.3, // 30% deducible referencial
+      fecha_gasto: expense.date
+    };
+    return this.http.post(this.apiUrl, payload);
   }
 
-  getExpenses(): Expense[] {
-    const data = localStorage.getItem(this.storageKey);
-    return data ? JSON.parse(data) : [];
-  }
-
-  addExpense(expense: Expense) {
-    const expenses = this.getExpenses();
-    expense.id = new Date().getTime().toString();
-    expenses.push(expense);
-    localStorage.setItem(this.storageKey, JSON.stringify(expenses));
-  }
-
-  deleteExpense(id: string) {
-    let expenses = this.getExpenses();
-    expenses = expenses.filter(e => e.id !== id);
-    localStorage.setItem(this.storageKey, JSON.stringify(expenses));
+  deleteExpense(id: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${id}`, { action: 'delete' });
   }
 }

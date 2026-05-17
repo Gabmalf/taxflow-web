@@ -63,8 +63,10 @@ export class ExpenseFormComponent {
 
   onSubmit() {
     if (this.expenseForm.valid) {
-      this.expenseService.addExpense(this.expenseForm.value);
-      this.router.navigate(['/expenses']);
+      this.expenseService.addExpense(this.expenseForm.value).subscribe({
+        next: () => this.router.navigate(['/expenses']),
+        error: (err) => console.error('Error adding expense', err)
+      });
     } else {
       this.expenseForm.markAllAsTouched();
     }

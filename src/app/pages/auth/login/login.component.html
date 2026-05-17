@@ -6,6 +6,13 @@
       <p class="text-muted">Tu asistente tributario personal</p>
     </div>
 
+    @if (errorMessage) {
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
+        <button type="button" class="btn-close" (click)="errorMessage = ''" aria-label="Close"></button>
+      </div>
+    }
+
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="mb-3">
         <label class="form-label fw-medium">Correo Electrónico</label>
@@ -16,12 +23,21 @@
         }
       </div>
 
-      <div class="mb-4">
+      <div class="mb-3">
         <label class="form-label fw-medium">Contraseña</label>
         <input type="password" class="form-control" formControlName="password" placeholder="********"
                [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
         @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
           <div class="invalid-feedback">La contraseña es requerida.</div>
+        }
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-medium">Seguridad: ¿Cuánto es {{ captchaNum1 }} + {{ captchaNum2 }}?</label>
+        <input type="text" class="form-control" formControlName="captcha" placeholder="Tu respuesta"
+               [class.is-invalid]="loginForm.get('captcha')?.invalid && loginForm.get('captcha')?.touched">
+        @if (loginForm.get('captcha')?.invalid && loginForm.get('captcha')?.touched) {
+          <div class="invalid-feedback">Por favor resuelve la operación.</div>
         }
       </div>
 
@@ -33,7 +49,14 @@
         <a routerLink="/forgot-password" class="text-decoration-none small text-primary">¿Olvidaste tu contraseña?</a>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Iniciar Sesión</button>
+      <button type="submit" class="btn btn-primary w-100 py-2 fw-bold" [disabled]="loginForm.invalid || isLoading">
+        @if (isLoading) {
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Ingresando...
+        } @else {
+          Iniciar Sesión
+        }
+      </button>
     </form>
 
     <div class="text-center mt-4">

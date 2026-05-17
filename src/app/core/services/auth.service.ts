@@ -1,13 +1,24 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, delay, of, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly resetTokenStorageKey = 'taxflow_reset_token';
+  private http = inject(HttpClient);
+  private apiUrl = 'https://le7uyeu46a.execute-api.us-east-1.amazonaws.com';
 
   constructor() { }
+
+  login(correo: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, { correo, password });
+  }
+
+  register(userData: { correo: string; password: string; nombres: string; apellidos: string; ruc: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/registro`, userData);
+  }
 
   requestPasswordReset(email: string): Observable<{ message: string }> {
     const normalizedEmail = email.trim().toLowerCase();

@@ -20,6 +20,18 @@ export class UserService {
   getUser(): User {
     const data = localStorage.getItem(this.storageKey);
     const stored = data ? JSON.parse(data) : {};
+    
+    // Mapeo de datos del backend al modelo User de Angular
+    if (stored.nombres && stored.apellidos) {
+      stored.fullName = `${stored.nombres} ${stored.apellidos}`;
+    }
+    if (stored.correo) {
+      stored.email = stored.correo;
+    }
+    if (stored.ruc) {
+      stored.lastDigitRuc = parseInt(stored.ruc.slice(-1), 10);
+    }
+
     return { ...this.defaultUser, ...stored };
   }
 

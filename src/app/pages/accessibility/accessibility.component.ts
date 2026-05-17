@@ -8,29 +8,14 @@ import { Component } from '@angular/core';
   styleUrl: './accessibility.component.css'
 })
 export class AccessibilityComponent {
-  highContrast = false;
-  largeFont = false;
-  simpleReading = false;
+  colorblindMode = false;
 
-  toggleHighContrast() {
-    this.highContrast = !this.highContrast;
-    if (this.highContrast) {
-      document.body.classList.add('high-contrast');
+  toggleColorblindMode() {
+    this.colorblindMode = !this.colorblindMode;
+    if (this.colorblindMode) {
+      document.body.classList.add('colorblind-mode');
     } else {
-      document.body.classList.remove('high-contrast');
+      document.body.classList.remove('colorblind-mode');
     }
-  }
-
-  toggleLargeFont() {
-    this.largeFont = !this.largeFont;
-    if (this.largeFont) {
-      document.body.classList.add('large-font');
-    } else {
-      document.body.classList.remove('large-font');
-    }
-  }
-
-  toggleSimpleReading() {
-    this.simpleReading = !this.simpleReading;
   }
 }

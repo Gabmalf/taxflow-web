@@ -43,24 +43,45 @@
       <h5 class="fw-bold mb-4 help-form-title">Consulta Tributaria</h5>
       <p class="small text-muted mb-4">Si tienes un caso específico, escríbenos y un experto tributario te orientará.</p>
       
+      @if (successMessage) {
+        <div class="alert alert-success d-flex align-items-center mb-3 py-2">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <div>{{ successMessage }}</div>
+        </div>
+      }
+      
+      @if (errorMessage) {
+        <div class="alert alert-danger d-flex align-items-center mb-3 py-2">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <div>{{ errorMessage }}</div>
+        </div>
+      }
+
       <form (submit)="submitQuery(); $event.preventDefault()">
         <div class="mb-3">
           <label class="form-label small help-form-label">Asunto</label>
-          <input type="text" class="form-control help-form-input" placeholder="Ej. Consulta sobre rentas" required>
+          <input type="text" class="form-control help-form-input" name="asunto" [(ngModel)]="formData.asunto" placeholder="Ej. Consulta sobre rentas" required>
         </div>
         <div class="mb-3">
           <label class="form-label small help-form-label">Categoría</label>
-          <select class="form-select help-form-input" required>
-            <option value="1">Deducciones</option>
-            <option value="2">Ingresos</option>
-            <option value="3">Plataforma SUNAT</option>
+          <select class="form-select help-form-input" name="categoria" [(ngModel)]="formData.categoria" required>
+            <option value="Deducciones">Deducciones</option>
+            <option value="Ingresos">Ingresos</option>
+            <option value="Plataforma SUNAT">Plataforma SUNAT</option>
           </select>
         </div>
         <div class="mb-4">
           <label class="form-label small help-form-label">Mensaje</label>
-          <textarea class="form-control help-form-input" rows="4" placeholder="Escribe tu consulta aquí..." required></textarea>
+          <textarea class="form-control help-form-input" name="mensaje" [(ngModel)]="formData.mensaje" rows="4" placeholder="Escribe tu consulta aquí..." required></textarea>
         </div>
-        <button type="submit" class="btn help-form-btn fw-bold w-100">Enviar Consulta</button>
+        <button type="submit" class="btn help-form-btn fw-bold w-100" [disabled]="isLoading">
+          @if (isLoading) {
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Enviando...
+          } @else {
+            Enviar Consulta
+          }
+        </button>
       </form>
     </div>
   </div>

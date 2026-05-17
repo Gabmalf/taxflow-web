@@ -1,42 +1,44 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Income } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IncomeService {
-  private storageKey = 'taxflow_incomes';
+  private http = inject(HttpClient);
+  private apiUrl = 'https://le7uyeu46a.execute-api.us-east-1.amazonaws.com/ingresos';
 
-  constructor() {
-    this.initMockData();
+  getIncomes(): Observable<Income[]> {
+    return this.http.get<{ status: string, data: any[] }>(this.apiUrl).pipe(
+      map(res => res.data.map(d => ({
+        id: d.id.toString(),
+        type: (d.tipo_ingreso || '').includes('Cuarta') ? 'Cuarta' : ((d.tipo_ingreso || '').includes('Quinta') ? 'Quinta' : 'Otro'),
+        date: d.fecha_ingreso,
+        amount: d.monto,
+        currency: d.moneda_codigo === 'USD' ? 'Dolares' : 'Soles',
+        description: d.descripcion,
+        hasRetention: d.retencion_aplicada > 0,
+        retentionAmount: d.retencion_aplicada || 0
+      })))
+    );
   }
 
-  private initMockData() {
-    if (!localStorage.getItem(this.storageKey)) {
-      const mockIncomes: Income[] = [
-        { id: '1', type: 'Cuarta', date: '2026-05-10', amount: 2500, currency: 'Soles', description: 'Servicios de consultoría', hasRetention: true },
-        { id: '2', type: 'Quinta', date: '2026-05-05', amount: 2000, currency: 'Soles', description: 'Planilla Mayo', hasRetention: false },
-        { id: '3', type: 'Otro', date: '2026-04-20', amount: 500, currency: 'Soles', description: 'Venta ocasional', hasRetention: false }
-      ];
-      localStorage.setItem(this.storageKey, JSON.stringify(mockIncomes));
-    }
+  addIncome(income: any): Observable<any> {
+    const payload = {
+      tipo_ingreso_id: income.type === 'Cuarta' ? 1 : (income.type === 'Quinta' ? 2 : 3),
+      moneda_id: income.currency === 'Soles' ? 1 : 2,
+      monto: income.amount,
+      fecha_ingreso: income.date,
+      descripcion: income.description,
+      retencion_aplicada: income.hasRetention ? (income.amount * 0.08) : 0
+    };
+    return this.http.post(this.apiUrl, payload);
   }
 
-  getIncomes(): Income[] {
-    const data = localStorage.getItem(this.storageKey);
-    return data ? JSON.parse(data) : [];
-  }
-
-  addIncome(income: Income) {
-    const incomes = this.getIncomes();
-    income.id = new Date().getTime().toString();
-    incomes.push(income);
-    localStorage.setItem(this.storageKey, JSON.stringify(incomes));
-  }
-
-  deleteIncome(id: string) {
-    let incomes = this.getIncomes();
-    incomes = incomes.filter(i => i.id !== id);
-    localStorage.setItem(this.storageKey, JSON.stringify(incomes));
+  deleteIncome(id: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${id}`, { action: 'delete' });
   }
 }

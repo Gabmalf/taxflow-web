@@ -28,7 +28,7 @@
             <td class="text-success fw-bold">S/ {{ report.expense | number:'1.2-2' }}</td>
             <td class="text-danger fw-bold">S/ {{ report.tax | number:'1.2-2' }}</td>
             <td class="text-end">
-              <button class="btn btn-sm btn-outline-secondary" (click)="exportReport()">Detalle</button>
+              <button class="btn btn-sm btn-outline-secondary" (click)="exportDetail(report)">Detalle</button>
             </td>
           </tr>
         }

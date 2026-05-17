@@ -54,6 +54,15 @@
         </div>
       </div>
 
+      <div class="mb-4">
+        <label class="form-label fw-medium">Seguridad: ¿Cuánto es {{ captchaNum1 }} + {{ captchaNum2 }}?</label>
+        <input type="text" class="form-control" formControlName="captcha" placeholder="Tu respuesta"
+               [class.is-invalid]="registerForm.get('captcha')?.invalid && registerForm.get('captcha')?.touched">
+        @if (registerForm.get('captcha')?.invalid && registerForm.get('captcha')?.touched) {
+          <div class="invalid-feedback">Por favor resuelve la operación.</div>
+        }
+      </div>
+
       <div class="mb-4 form-check">
         <input type="checkbox" class="form-check-input" formControlName="terms" id="terms"
                [class.is-invalid]="registerForm.get('terms')?.invalid && registerForm.get('terms')?.touched">
@@ -62,7 +71,21 @@
         </label>
       </div>
 
-      <button type="submit" class="btn btn-secondary w-100 py-2 fw-bold text-white">Registrarse</button>
+      @if (errorMessage) {
+        <div class="alert alert-danger d-flex align-items-center mb-4 py-2">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <div>{{ errorMessage }}</div>
+        </div>
+      }
+
+      <button type="submit" class="btn btn-secondary w-100 py-2 fw-bold text-white" [disabled]="isLoading">
+        @if (isLoading) {
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Registrando...
+        } @else {
+          Registrarse
+        }
+      </button>
     </form>
 
     <div class="text-center mt-4">

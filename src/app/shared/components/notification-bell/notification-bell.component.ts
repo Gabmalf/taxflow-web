@@ -18,7 +18,7 @@ export class NotificationBellComponent {
     private notificationService: NotificationService,
     private router: Router
   ) {
-    this.notificationService.notifications$
+    this.notificationService.getNotifications()
       .subscribe((list: Notification[]) => {
         this.notifications = list;
       });

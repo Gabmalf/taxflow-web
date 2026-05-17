@@ -1,0 +1,21 @@
+{
+  "name": "taxflow-lambda",
+  "version": "1.0.0",
+  "description": "TAXFLOW backend — AWS Lambda + SQL Server",
+  "main": "handler.js",
+  "engines": {
+    "node": ">=20.x"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.600.0",
+    "mssql": "^11.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "jest": "^29.7.0"
+  },
+  "scripts": {
+    "test": "jest --runInBand",
+    "package": "zip -r function.zip handler.js src/ node_modules/"
+  }
+}

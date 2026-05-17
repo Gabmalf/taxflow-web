@@ -113,22 +113,24 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Accessibility Settings overrides */
-.high-contrast {
-  --tf-bg-light: #000 !important;
-  --tf-surface: #111 !important;
-  --tf-text-main: #FFF !important;
-  --tf-primary-dark: #FFEB3B !important;
-  --tf-primary: #FFEB3B !important;
-  --tf-secondary: #FFF !important;
+.colorblind-mode {
+  /* Deuteranopia/Protanopia friendly adjustments */
+  --tf-success: #005AB5; /* Shift green to blue for distinction */
+  --tf-error: #DC3220; /* Ensure red is vivid and distinct */
+  --tf-warning: #FFC20A; /* Accessible yellow */
+  
+  /* Apply a slight filter to increase distinction */
+  filter: contrast(1.05) saturate(1.2);
 }
-.high-contrast body, .high-contrast .tf-card {
-  background-color: var(--tf-bg-light);
-  color: var(--tf-text-main);
-  border: 1px solid #fff;
+
+.colorblind-mode .text-success, 
+.colorblind-mode .bg-success, 
+.colorblind-mode .btn-success {
+  color: var(--tf-success) !important;
+  background-color: rgba(0, 90, 181, 0.1) !important;
 }
-.high-contrast h1, .high-contrast h2, .high-contrast h3 {
-  color: var(--tf-primary-dark);
-}
-.large-font {
-  font-size: 120% !important;
+
+.colorblind-mode .badge.bg-success {
+  background-color: var(--tf-success) !important;
+  color: #fff !important;
 }

@@ -30,8 +30,10 @@ export class IncomeFormComponent {
 
   onSubmit() {
     if (this.incomeForm.valid) {
-      this.incomeService.addIncome(this.incomeForm.value);
-      this.router.navigate(['/incomes']);
+      this.incomeService.addIncome(this.incomeForm.value).subscribe({
+        next: () => this.router.navigate(['/incomes']),
+        error: (err) => console.error('Error adding income', err)
+      });
     } else {
       this.incomeForm.markAllAsTouched();
     }

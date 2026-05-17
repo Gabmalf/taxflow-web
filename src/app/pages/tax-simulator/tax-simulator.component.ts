@@ -22,6 +22,8 @@ export class TaxSimulatorComponent implements OnInit {
   }
 
   runSimulation() {
-    this.result = this.taxService.simulate();
+    this.taxService.simulate().subscribe(res => {
+      this.result = res;
+    });
   }
 }
