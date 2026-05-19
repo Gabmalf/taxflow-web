@@ -13,22 +13,31 @@ export class IncomeService {
 
   getIncomes(): Observable<Income[]> {
     return this.http.get<{ status: string, data: any[] }>(this.apiUrl).pipe(
-      map(res => res.data.map(d => ({
-        id: d.id.toString(),
-        type: (d.tipo_ingreso || '').includes('Cuarta') ? 'Cuarta' : ((d.tipo_ingreso || '').includes('Quinta') ? 'Quinta' : 'Otro'),
-        date: d.fecha_ingreso,
-        amount: d.monto,
-        currency: d.moneda_codigo === 'USD' ? 'Dolares' : 'Soles',
-        description: d.descripcion,
-        hasRetention: d.retencion_aplicada > 0,
-        retentionAmount: d.retencion_aplicada || 0
-      })))
+      map(res => res.data.map(d => {
+        let mappedType = d.tipo_ingreso || 'Otro';
+        if (mappedType === 'Dietas de Directorio' || mappedType === 'Sueldo Fijo') {
+          mappedType = 'Planilla';
+        } else if (mappedType === 'Utilidades' || mappedType === 'Gratificaciones') {
+          mappedType = 'Otro';
+        }
+        
+        return {
+          id: d.id.toString(),
+          type: mappedType,
+          date: d.fecha_ingreso,
+          amount: d.monto,
+          currency: d.moneda_codigo === 'USD' ? 'Dolares' : 'Soles',
+          description: d.descripcion,
+          hasRetention: d.retencion_aplicada > 0,
+          retentionAmount: d.retencion_aplicada || 0
+        };
+      }))
     );
   }
 
   addIncome(income: any): Observable<any> {
     const payload = {
-      tipo_ingreso_id: income.type === 'Cuarta' ? 1 : (income.type === 'Quinta' ? 2 : 3),
+      tipo_ingreso_id: income.type === 'Cuarta' ? 1 : (income.type === 'Quinta' ? 3 : 5),
       moneda_id: income.currency === 'Soles' ? 1 : 2,
       monto: income.amount,
       fecha_ingreso: income.date,

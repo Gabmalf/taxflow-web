@@ -11,7 +11,7 @@ export interface User {
 
 export interface Income {
   id: string;
-  type: 'Cuarta' | 'Quinta' | 'Otro';
+  type: string;
   date: string;
   amount: number;
   currency: 'Soles' | 'Dolares';

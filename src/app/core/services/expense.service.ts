@@ -21,7 +21,7 @@ export class ExpenseService {
         deducibleAmount: d.monto_deducible || 0,
         currency: 'Soles', // Mapping for UI
         description: '', // g.descripcion no existe en DB, pero lo mapeamos para no romper UI
-        providerRuc: '',
+        providerRuc: localStorage.getItem('expense_ruc_' + d.id) || '',
         receiptType: ''
       })))
     );
@@ -56,7 +56,14 @@ export class ExpenseService {
       monto_deducible: expense.amount * deductionFactor,
       fecha_gasto: expense.date
     };
-    return this.http.post(this.apiUrl, payload);
+    return this.http.post<any>(this.apiUrl, payload).pipe(
+      map(res => {
+        if (res.status === 'success' && res.data && res.data.id && expense.providerRuc) {
+          localStorage.setItem('expense_ruc_' + res.data.id, expense.providerRuc);
+        }
+        return res;
+      })
+    );
   }
 
   deleteExpense(id: string): Observable<any> {

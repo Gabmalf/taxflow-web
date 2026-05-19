@@ -100,7 +100,13 @@ export class IncomesComponent implements OnInit {
     this.filteredIncomes = this.incomes.filter((income) => {
       const matchesPeriod =
         this.selectedPeriod === 'all' || this.getPeriodValue(income.date) === this.selectedPeriod;
-      const matchesType = this.selectedType === 'all' || income.type === this.selectedType;
+      const isCuarta = income.type.includes('Honorario') || income.type.includes('Cuarta');
+      const isQuinta = income.type.includes('Sueldo') || income.type.includes('Quinta') || income.type.includes('Planilla');
+      
+      const matchesType = this.selectedType === 'all' || 
+                         (this.selectedType === 'Cuarta' && isCuarta) ||
+                         (this.selectedType === 'Quinta' && isQuinta) ||
+                         (this.selectedType === 'Otro' && !isCuarta && !isQuinta);
       const matchesRetention =
         this.selectedRetention === 'all' ||
         (this.selectedRetention === 'with' && income.hasRetention) ||

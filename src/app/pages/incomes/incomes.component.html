@@ -121,7 +121,10 @@
               <tr>
                 <td>{{ income.date | date:'dd/MM/yyyy' }}</td>
                 <td>
-                  <span class="badge" [class.bg-primary]="income.type === 'Cuarta'" [class.bg-secondary]="income.type === 'Quinta'" [class.bg-dark]="income.type === 'Otro'">
+                  <span class="badge" 
+                    [class.bg-primary]="income.type.includes('Honorario') || income.type.includes('Cuarta')" 
+                    [class.bg-secondary]="income.type.includes('Sueldo') || income.type.includes('Quinta') || income.type.includes('Planilla')" 
+                    [class.bg-dark]="!income.type.includes('Honorario') && !income.type.includes('Cuarta') && !income.type.includes('Sueldo') && !income.type.includes('Quinta') && !income.type.includes('Planilla')">
                     {{ income.type }}
                   </span>
                 </td>
