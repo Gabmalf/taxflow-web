@@ -7,7 +7,7 @@
   <!-- Datos del Cálculo -->
   <div class="col-lg-7">
     <div class="tf-card h-100">
-      <h5 class="fw-bold mb-4 border-bottom pb-2 sim-result-title">Detalle de Cálculo (UIT {{ uit }} = S/ {{ uit | number }})</h5>
+      <h5 class="fw-bold mb-4 border-bottom pb-2 sim-result-title">Detalle de Cálculo (UIT = S/ {{ uit | number }})</h5>
       
       <table class="table table-borderless">
         <tbody>
@@ -29,7 +29,7 @@
           </tr>
           <tr class="border-top">
             <td class="fw-bold">Renta Neta Imponible de Trabajo</td>
-            <td class="text-end fw-bold">S/ {{ (result.netRent - result.deduction7UIT - result.additionalDeduction) > 0 ? (result.netRent - result.deduction7UIT - result.additionalDeduction) : 0 | number:'1.2-2' }}</td>
+            <td class="text-end fw-bold">S/ {{ ((result.netRent - result.deduction7UIT - result.additionalDeduction) > 0 ? (result.netRent - result.deduction7UIT - result.additionalDeduction) : 0) | number:'1.2-2' }}</td>
           </tr>
         </tbody>
       </table>

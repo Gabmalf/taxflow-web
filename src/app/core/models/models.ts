@@ -26,6 +26,7 @@ export interface Expense {
   category: string;
   date: string;
   amount: number;
+  deducibleAmount?: number;
   currency: 'Soles' | 'Dolares';
   description: string;
   providerRuc: string;

@@ -38,10 +38,22 @@ export class ExpenseService {
       'Otros gastos deducibles': 7
     };
     
+    const deductionMap: Record<string, number> = {
+      'Restaurantes y hoteles': 0.15,
+      'Servicios médicos': 0.30,
+      'Servicios odontológicos': 0.30,
+      'Alquiler de inmueble': 0.30,
+      'Servicios profesionales': 0.30,
+      'Aportes a EsSalud de trabajadores del hogar': 1.00,
+      'Otros gastos deducibles': 0.30
+    };
+    
+    const deductionFactor = deductionMap[expense.category] || 0.30;
+    
     const payload = {
       categoria_gasto_id: categoryMap[expense.category] || 1,
       monto_total: expense.amount,
-      monto_deducible: expense.amount * 0.3, // 30% deducible referencial
+      monto_deducible: expense.amount * deductionFactor,
       fecha_gasto: expense.date
     };
     return this.http.post(this.apiUrl, payload);
